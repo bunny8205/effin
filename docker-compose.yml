@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  cyborgdb:
+    image: cyborginc/cyborgdb-service:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - CYBORGDB_DB_TYPE=valkeylite
+    volumes:
+      - ./.cyborgdb:/root/.cyborgdb
+
+  bank1:
+    build: .
+    command: python -m effin.node
+    environment:
+      - CYBORGDB_ENDPOINT=http://cyborgdb:8000
+      - CYBORGDB_API_KEY=cyborg_9e0a3d56d0624ee2a8d2acc9d1f4a5f3
+      - INDEX_KEY=0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+      - BANK_ID=bank1
+      - FERNET_KEY=cVjDVe62vqCkmqPwvDZcTxVPuedyYt4pVQnXsnRf6KA=
+      - AUDIT_FILE=/data/audit_bank1.jsonl
+      - PROM_PORT=9001
+    depends_on:
+      - cyborgdb
+    volumes:
+      - ./data:/data
+
+  dashboard:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8501:8501"
+    command: bash -lc "pip install -r requirements.txt && streamlit run dashboard/app.py --server.port 8501"
+    environment:
+      - FERNET_KEY=<your_fernet_base64_key_here>
