@@ -203,9 +203,4 @@ GitHub: [https://github.com/bunny8205/effin/](https://github.com/bunny8205/effin
 
 ---
 
-```
 
-
-
-Just say 👍
-```
