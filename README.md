@@ -1,7 +1,4 @@
-Here is the **properly formatted Markdown (`.md`) file**, clean, professional, and **ready to paste directly** into your repo as
-👉 **`RUN_INSTRUCTIONS.md`** or **`README.md`**.
 
-Everything is correctly fenced, titled, and readable on GitHub.
 
 ---
 
