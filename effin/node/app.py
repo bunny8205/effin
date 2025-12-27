@@ -236,6 +236,7 @@ async def worker_consume(name: str):
                                 "bank_id": BANK_ID,
                                 "matched_bank": meta2.get("bank_id"),
                                 "matched_tx_ref": meta2.get("tx_ref"),
+                                "ring_id": f"ring-{meta2.get('tx_ref')}",  # 🔑 fraud ring key
                                 "timestamp": time.time()
                             }
                             ALERT_COUNTER.labels(severity="high").inc()
