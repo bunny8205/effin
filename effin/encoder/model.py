@@ -5,7 +5,7 @@ class FraudEncoder:
     """
     Embedding encoder for encrypted fraud detection.
     This version ENFORCES very strong cross-bank similarity for fraud
-    while keeping each bank’s normal behavior separated.
+    while keeping each bank's normal behavior separated.
     """
 
     def __init__(self):
@@ -72,3 +72,21 @@ class FraudEncoder:
             vec = np.concatenate([vec, np.zeros(self.embed_dim - len(vec))])
 
         return vec.astype(np.float32)
+
+    # ----------------------------------------------
+    # NEW: Fraud Fingerprint Generator
+    # ----------------------------------------------
+    def embed_fraud_fingerprint(self, tx_history: list) -> np.ndarray:
+        """
+        Build an encrypted fraud fingerprint from multiple transactions.
+        Uses only behavioral vectors (no raw fields).
+        """
+        if not tx_history:
+            return np.zeros(self.embed_dim, dtype=np.float32)
+
+        vecs = [self.embed_transaction(tx) for tx in tx_history]
+        avg = np.mean(vecs, axis=0)
+
+        # Normalize for ANN stability
+        avg = avg / (np.linalg.norm(avg) + 1e-12)
+        return avg.astype(np.float32)
